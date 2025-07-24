@@ -32,7 +32,7 @@ Grammar intersect(const Grammar &grammar, const Automaton &automaton) {
                                 ->second.find(rule.get_right_part()[0])
                                 ->second == q2) {
                             rules.push_back(Rule(get_nt_q1_q2(rule.get_main_non_terminal(), q1, q2, state_number, symbols_number),
-                                                 {get_nt_q1_q2(rule.get_right_part()[0], q1, q2, state_number, symbols_number)}));
+                                                 {rule.get_right_part()[0]}));
                         } else {
                             rules.push_back(
                                 Rule(get_nt_q1_q2(rule.get_main_non_terminal(), q1, q2, state_number, symbols_number), {}));
@@ -54,8 +54,8 @@ Grammar intersect(const Grammar &grammar, const Automaton &automaton) {
                                     ->second == q2) {
                                 rules.push_back(
                                     Rule(get_nt_q1_q2(rule.get_main_non_terminal(), q1, q2, state_number, symbols_number),
-                                         {get_nt_q1_q2(rule.get_right_part()[0], q1, qk, state_number, symbols_number),
-                                          get_nt_q1_q2(rule.get_right_part()[1], q1, qk, state_number, symbols_number)}));
+                                         {rule.get_right_part()[0],
+                                          rule.get_right_part()[1]}));
                             } else {rules.push_back(
                                     Rule(
                                 get_nt_q1_q2(rule.get_main_non_terminal(), q1, q2, state_number, symbols_number), {}));
@@ -63,7 +63,7 @@ Grammar intersect(const Grammar &grammar, const Automaton &automaton) {
                         } else {
                             rules.push_back(Rule(
                                 get_nt_q1_q2(rule.get_main_non_terminal(), q1, q2, state_number, symbols_number),
-                                {get_nt_q1_q2(rule.get_right_part()[0], q1, qk, state_number, symbols_number),
+                                {rule.get_right_part()[0],
                                  get_nt_q1_q2(rule.get_right_part()[1], qk, q2,
                                               state_number, symbols_number)}));
                         }
