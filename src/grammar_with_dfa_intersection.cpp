@@ -25,21 +25,21 @@ Grammar intersect(const Grammar &grammar, const Automaton &automaton) {
                     std::cout << progress << " " << rules.size() << std::endl;
                 }
                 if (rule.get_right_part().size() == 0) {
-                    rules.push_back(Rule(rule.get_main_non_terminal(), {}));
+                    rules.push_back(Rule(get_nt_q1_q2(rule.get_main_non_terminal(), q1, q2, state_number, symbols_number), {}));
                 } else if (rule.get_right_part().size() == 1) {
                     if (rule.get_right_part()[0] < symbols_number) {
                         if (automaton_transitions.find(q1)
                                 ->second.find(rule.get_right_part()[0])
                                 ->second == q2) {
-                            rules.push_back(Rule(rule.get_main_non_terminal(),
-                                                 {rule.get_right_part()[0]}));
+                            rules.push_back(Rule(get_nt_q1_q2(rule.get_main_non_terminal(), q1, q2, state_number, symbols_number),
+                                                 {get_nt_q1_q2(rule.get_right_part()[0], q1, q2, state_number, symbols_number)}));
                         } else {
                             rules.push_back(
-                                Rule(rule.get_main_non_terminal(), {}));
+                                Rule(get_nt_q1_q2(rule.get_main_non_terminal(), q1, q2, state_number, symbols_number), {}));
                         }
                     } else {
                         rules.push_back(
-                            Rule(rule.get_main_non_terminal(),
+                            Rule(get_nt_q1_q2(rule.get_main_non_terminal(), q1, q2, state_number, symbols_number),
                                  {get_nt_q1_q2(rule.get_right_part()[0], q1, q2,
                                                state_number, symbols_number)}));
                     }
@@ -53,17 +53,17 @@ Grammar intersect(const Grammar &grammar, const Automaton &automaton) {
                                     ->second.find(rule.get_right_part()[1])
                                     ->second == q2) {
                                 rules.push_back(
-                                    Rule(rule.get_main_non_terminal(),
-                                         {rule.get_right_part()[0],
-                                          rule.get_right_part()[1]}));
+                                    Rule(get_nt_q1_q2(rule.get_main_non_terminal(), q1, q2, state_number, symbols_number),
+                                         {get_nt_q1_q2(rule.get_right_part()[0], q1, qk, state_number, symbols_number),
+                                          get_nt_q1_q2(rule.get_right_part()[1], q1, qk, state_number, symbols_number)}));
                             } else {
                                 rules.push_back(
-                                    Rule(rule.get_main_non_terminal(), {}));
+                                    Rule(get_nt_q1_q2(rule.get_main_non_terminal(), q1, q2, state_number, symbols_number), {}));
                             }
                         } else {
                             rules.push_back(Rule(
-                                rule.get_main_non_terminal(),
-                                {rule.get_right_part()[0],
+                                get_nt_q1_q2(rule.get_main_non_terminal(), q1, q2, state_number, symbols_number),
+                                {get_nt_q1_q2(rule.get_right_part()[0], q1, qk, state_number, symbols_number),
                                  get_nt_q1_q2(rule.get_right_part()[1], qk, q2,
                                               state_number, symbols_number)}));
                         }
@@ -71,7 +71,7 @@ Grammar intersect(const Grammar &grammar, const Automaton &automaton) {
                         for (State qk = 0; qk < automaton.get_state_number();
                              ++qk) {
                             rules.push_back(Rule(
-                                rule.get_main_non_terminal(),
+                                get_nt_q1_q2(rule.get_main_non_terminal(), q1, q2, state_number, symbols_number),
                                 {get_nt_q1_q2(rule.get_right_part()[0], q1, qk,
                                               state_number, symbols_number),
                                  get_nt_q1_q2(rule.get_right_part()[1], qk, q2,
