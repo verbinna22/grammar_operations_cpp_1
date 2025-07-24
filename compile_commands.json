@@ -1,0 +1,46 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-I./include",
+      "-I./lib",
+      "-I./src",
+      "-Wall",
+      "-Wextra",
+      "-std=c++17",
+      "-pedantic",
+      "-O0",
+      "-DDEBUG",
+      "-g3",
+      "-c",
+      "-o",
+      "build/./src/automatone.cpp.o",
+      "src/automatone.cpp"
+    ],
+    "directory": "/mnt/data/MyOwnFolder/learning/p_algo/grammar_operations_cpp",
+    "file": "/mnt/data/MyOwnFolder/learning/p_algo/grammar_operations_cpp/src/automatone.cpp",
+    "output": "/mnt/data/MyOwnFolder/learning/p_algo/grammar_operations_cpp/build/src/automatone.cpp.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-I./include",
+      "-I./lib",
+      "-I./src",
+      "-Wall",
+      "-Wextra",
+      "-std=c++17",
+      "-pedantic",
+      "-O0",
+      "-DDEBUG",
+      "-g3",
+      "-c",
+      "-o",
+      "build/./src/main.cpp.o",
+      "src/main.cpp"
+    ],
+    "directory": "/mnt/data/MyOwnFolder/learning/p_algo/grammar_operations_cpp",
+    "file": "/mnt/data/MyOwnFolder/learning/p_algo/grammar_operations_cpp/src/main.cpp",
+    "output": "/mnt/data/MyOwnFolder/learning/p_algo/grammar_operations_cpp/build/src/main.cpp.o"
+  }
+]

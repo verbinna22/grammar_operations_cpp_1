@@ -1,0 +1,9 @@
+{
+    "makefile.launchConfigurations": [
+        {
+            "cwd": "/mnt/data/MyOwnFolder/learning/p_algo/grammar_operations_cpp/build",
+            "binaryPath": "/mnt/data/MyOwnFolder/learning/p_algo/grammar_operations_cpp/build/grammarOperations",
+            "binaryArgs": []
+        }
+    ]
+}
