@@ -1,6 +1,7 @@
 #ifndef ALPHABET_H
 #define ALPHABET_H
 
+#include <cstdlib>
 #include <sstream>
 #include <string>
 
@@ -55,6 +56,48 @@ inline std::string symbol_to_string(NonTerminal nt) {
             }
             return s.str();
     }
+}
+
+inline NonTerminal string_to_symbol(std::string nt) {
+    if (nt == "alloc") {
+        return alloc;
+    }
+    if (nt == "alloc_r") {
+        return alloc_r;
+    }
+    if (nt == "assign") {
+        return assign;
+    }
+    if (nt == "assign_r") {
+        return assign_r;
+    }
+    if (nt == "ld_i") {
+        return ld_i;
+    }
+    if (nt == "st_i") {
+        return st_i;
+    }
+    if (nt == "st_r_i") {
+        return st_r_i;
+    }
+    if (nt == "ld_r_i") {
+        return ld_r_i;
+    }
+    NonTerminal result = 4;
+    if (nt.rfind("assign_", 0) != 0) {
+        throw 123;
+    }
+    nt = nt.substr(7);
+    if (nt.rfind("r_", 0) == 0) {
+        result += 2;
+    }
+    auto pos = nt.find("_");
+    result += 4 * atoi(nt.substr(0, pos).c_str());
+    nt = nt.substr(pos);
+    if (nt == "_close") {
+        result += 1;
+    }
+    return result;
 }
 }  // namespace grop
 

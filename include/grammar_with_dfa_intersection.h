@@ -17,7 +17,7 @@ constexpr NonTerminal get_nt_q1_q2(NonTerminal nt, State q1, State q2,
 
 constexpr bool is_i_state_intersect(NonTerminal nt, int number_of_assign, uint64_t state_number,
                                    uint64_t symbols_number) {
-    return is_i_state(nt, (number_of_assign - (symbols_number + 1)) / (state_number * state_number));
+    return is_i_state((nt - (symbols_number + 1)) / (state_number * state_number), number_of_assign);
 }
 }
 

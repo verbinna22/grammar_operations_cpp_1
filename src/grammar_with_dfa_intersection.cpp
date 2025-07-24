@@ -56,9 +56,9 @@ Grammar intersect(const Grammar &grammar, const Automaton &automaton) {
                                     Rule(get_nt_q1_q2(rule.get_main_non_terminal(), q1, q2, state_number, symbols_number),
                                          {get_nt_q1_q2(rule.get_right_part()[0], q1, qk, state_number, symbols_number),
                                           get_nt_q1_q2(rule.get_right_part()[1], q1, qk, state_number, symbols_number)}));
-                            } else {
-                                rules.push_back(
-                                    Rule(get_nt_q1_q2(rule.get_main_non_terminal(), q1, q2, state_number, symbols_number), {}));
+                            } else {rules.push_back(
+                                    Rule(
+                                get_nt_q1_q2(rule.get_main_non_terminal(), q1, q2, state_number, symbols_number), {}));
                             }
                         } else {
                             rules.push_back(Rule(

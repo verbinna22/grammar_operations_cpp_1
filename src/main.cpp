@@ -36,4 +36,11 @@ int main(int argc, const char **argv) {
         },
         grop::symbol_to_string, alphabet_size);
     return 0;
+
+    // if (argc < 3) {
+    //     return 1;
+    // }
+    // const char *OLD_GRAMMAR_FILE = argv[1];
+    // const char *NEW_GRAMMAR_FILE = argv[2];
+    // grop::read_grammar(OLD_GRAMMAR_FILE, const std::unordered_map<std::string, NonTerminal> &alphabet_non_terminals);
 }
