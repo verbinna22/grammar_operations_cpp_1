@@ -27,8 +27,10 @@ Grammar optimize_rules(const Grammar &grammar) {
         for (const auto &nt : rule.get_right_part()) {
             nt_map[nt].indicies.push_back(i);
         }
+        nt_map[rule.get_main_non_terminal()].indicies.push_back(i);
         nt_map[rule.get_main_non_terminal()].rule_number++;
         if (rule.get_right_part().size() == 0) {
+            rules_to_remove.insert(i);
             nt_map[rule.get_main_non_terminal()].empty_number++;
         } else {
             non_empty_nt.insert(rule.get_main_non_terminal());
@@ -43,9 +45,11 @@ Grammar optimize_rules(const Grammar &grammar) {
         for (int j : nt_map[nt].indicies) {
             rules_to_remove.insert(j);
             auto main_nt = grammar.get_rules()[j].get_main_non_terminal();
-            nt_map[main_nt].empty_number++;
-            if (nt_map[main_nt].empty_number == nt_map[main_nt].rule_number) {
-                q.push(main_nt);
+            if (main_nt != nt) {
+                nt_map[main_nt].empty_number++;
+                if (nt_map[main_nt].empty_number == nt_map[main_nt].rule_number) {
+                    q.push(main_nt);
+                }
             }
         }
     }
@@ -55,9 +59,11 @@ Grammar optimize_rules(const Grammar &grammar) {
         for (int j : nt_map[nt].indicies) {
             rules_to_remove.insert(j);
             auto main_nt = grammar.get_rules()[j].get_main_non_terminal();
-            nt_map[main_nt].empty_number++;
-            if (nt_map[main_nt].empty_number == nt_map[main_nt].rule_number) {
-                q.push(main_nt);
+            if (main_nt != nt) {
+                nt_map[main_nt].empty_number++;
+                if (nt_map[main_nt].empty_number == nt_map[main_nt].rule_number) {
+                    q.push(main_nt);
+                }
             }
         }
     }
