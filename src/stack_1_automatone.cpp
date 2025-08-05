@@ -31,7 +31,7 @@ Automaton generate_stack_1_automaton(int number_of_assign) {
                     transitions[q][letter] = qf;
                 }
             } else {
-                transitions[q0][letter] = qd;
+                transitions[q0][letter] = q0;
                 for (State q = get_q_j(1); q < state_number; ++q) {
                     if (q == get_q_j(i)) {
                         transitions[q][letter] = q0;
