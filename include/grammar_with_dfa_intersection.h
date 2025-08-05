@@ -11,10 +11,10 @@ Grammar intersect(const Grammar &grammar, const Automaton &automaton);
 constexpr NonTerminal get_nt_q1_q2(NonTerminal nt, State q1, State q2,
                                    uint64_t state_number,
                                    uint64_t symbols_number) {
-    if ((symbols_number + 1 + state_number * state_number * (nt - symbols_number) +
-           state_number * q2 + q1) >= 11019) {
-            throw 0; //
-           }
+//     if ((symbols_number + 1 + state_number * state_number * (nt - symbols_number) +
+//            state_number * q2 + q1) >= 11019) {
+//             throw 0; //
+//            }
     return symbols_number + 1 + state_number * state_number * (nt - symbols_number) +
            state_number * q2 + q1;
 }

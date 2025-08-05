@@ -34,13 +34,13 @@ inline std::string symbol_to_string(NonTerminal nt) {
         case assign_r:
             return "assign_r";
         case ld_i:
-            return "ld_i";
+            return "load_i";
         case st_i:
-            return "st_i";
+            return "store_i";
         case st_r_i:
-            return "st_r_i";
+            return "store_r_i";
         case ld_r_i:
-            return "ld_r_i";
+            return "load_r_i";
         default:
             nt -= 4;
             std::stringstream s;
@@ -71,16 +71,16 @@ inline NonTerminal string_to_symbol(std::string nt) {
     if (nt == "assign_r") {
         return assign_r;
     }
-    if (nt == "ld_i") {
+    if (nt == "load_i") {
         return ld_i;
     }
-    if (nt == "st_i") {
+    if (nt == "store_i") {
         return st_i;
     }
-    if (nt == "st_r_i") {
+    if (nt == "store_r_i") {
         return st_r_i;
     }
-    if (nt == "ld_r_i") {
+    if (nt == "load_r_i") {
         return ld_r_i;
     }
     NonTerminal result = 4;
