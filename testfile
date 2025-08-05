@@ -1,0 +1,122 @@
+TARGET_EXEC:=grammarOperationsTest
+CC=gcc
+CXX=g++
+BUILD_DIR:=./build
+SRC_DIRS:=./src ./test
+EXCLUDES:=./src/main.cpp
+SRCS:=$(filter-out $(EXCLUDES),$(shell find $(SRC_DIRS) -name '*.cpp' -or -name '*.c' -or -name '*.s'))
+OBJS:=$(SRCS:%=$(BUILD_DIR)/%.o)
+DEPS:=$(OBJS:.o=.d)
+INC_DIRS:=./include ./lib $(shell find $(SRC_DIRS) -type d)
+LIBS:=
+INC_FLAGS:=$(addprefix -I, $(INC_DIRS))
+CPP_FLAGS:=$(INC_FLAGS) -MMD -MP
+LDFLAGS:=$(addprefix -l, $(LIBS)) #-L ./test/lib -L ./lib
+CXXFLAGS:=-Wall -Wextra -std=c++17 -pedantic
+CFLAGS:=-Wall -Werror -Wextra -std=c23 -pedantic
+
+debug: CXXFLAGS += -O0 -DDEBUG -g3
+debug: LDFLAGS += -g
+debug: CCFLAGS += -O0 -DDEBUG -g3
+debug: $(BUILD_DIR)/$(TARGET_EXEC)
+
+release: CXXFLAGS += -O3 -DNDEBUG
+release: CCFLAGS += -O3 -DNDEBUG
+release: $(BUILD_DIR)/$(TARGET_EXEC)
+
+asan: CXXFLAGS += -fsanitize=address
+asan: CCFLAGS += -fsanitize=address
+asan: LDFLAGS += -fsanitize=address
+asan: debug
+
+ubsan: CXXFLAGS += -fsanitize=undefined
+ubsan: CCFLAGS += -fsanitize=undefined
+ubsan: LDFLAGS += -fsanitize=undefined
+ubsan: debug
+
+tsan: CXXFLAGS += -fsanitize=thread -fPIC -pie
+tsan: CCFLAGS += -fsanitize=thread -fPIC -pie
+tsan: LDFLAGS += -fsanitize=thread -fPIC -pie
+tsan: debug
+
+gproof: CXXFLAGS += -pg
+gproof: CCFLAGS += -pg
+gproof: LDFLAGS += -pg
+gproof: debug
+
+gcov: CXXFLAGS += -fprofile-arcs -ftest-coverage
+gcov: CCFLAGS += -fprofile-arcs -ftest-coverage
+gcov: LDFLAGS += -lgcov
+gcov: debug
+
+gcov_report: gcov
+	lcov --directory $(BUILD_DIR) --capture --output-file $(BUILD_DIR)/tst.info
+	mkdir $(BUILD_DIR)/cov-report
+	genhtml -o $(BUILD_DIR)/cov-report/ $(BUILD_DIR)/tst.info
+
+clangd: clean
+	bear -- make
+
+cppcheck:
+	cppcheck $(INC_DIRS) --suppress=missingIncludeSystem -q --enable=all --inconclusive --std=c++11 $(SRC_DIRS)
+
+# valgrind --leak-check=yes myprog arg1 arg2
+# gdb
+# valgrind --tool=cachegrind prog
+# valgrind --tool=callgrind [callgrind options] your-program [program options]
+# valgrind --tool=hellgrind
+# tests (u, a) and stress tests
+# valgrind tool=massif
+# gprof -e boring -f foo -f bar myprogram > gprof.output // gmon.out - profile data
+
+# __CPROVER_assume(desired_climb>=-MAX_CLIMB && desired_climb<=MAX_CLIMB);
+# 64:     __CPROVER_assume(estimator_z_dot>=-MAX_CLIMB && estimator_z_dot<=MAX_CLIMB);
+# 65:
+# 66:     __CPROVER_input("desired_climb", desired_climb);
+# 67:     __CPROVER_input("estimator_z_dot", estimator_z_dot);
+# cbmc pid.c --cover mcdc --show-test-suite --unwind 6 --xml-ui
+
+# __CPROVER_assert(p!=NULL, "p is not NULL");
+# __CPROVER_precondition(a >= 0);
+# __CPROVER_postcondition(rval >= 0);
+# cbmc file1.c --show-properties --bounds-check --pointer-check
+#  cbmc file1.c --bounds-check --pointer-check --trace --xml-ui
+# cbmc binsearch.c --function binsearch --unwind 6 --bounds-check --unwinding-assertions
+
+# klee_make_symbolic(&a, sizeof(a), "a");
+# clang -I ../../include -emit-llvm -c -g -O0 -Xclang -disable-O0-optnone get_sign.c
+# klee get_sign.bc
+# ktest-tool klee-last/test000002.ktest
+# export LD_LIBRARY_PATH=path-to-klee-build-dir/lib/:$LD_LIBRARY_PATH
+# gcc -I ../../include -L path-to-klee-build-dir/lib/ get_sign.c -lkleeRuntest
+# KTEST_FILE=klee-last/test000001.ktest ./a.out
+
+# ../kleef/bin/kleef --max-time 3 $1 |& grep "ERROR"
+# ../kleef/bin/kleef --max-time 10 --gcov $1
+
+# wget https://zenodo.org/records/10202734/files/kleef.zip
+# unzip kleef.zip
+# mv kleef.py kleef/bin/kleef
+# 
+
+# cppcheck -q --enable=all ./source
+
+# ./cpplint.py --clint hw1/LinkedList.c
+# 
+
+$(BUILD_DIR)/$(TARGET_EXEC): $(OBJS)
+	$(CXX) $(OBJS) -o $@ $(LDFLAGS)
+
+$(BUILD_DIR)/%.c.o: %.c
+	mkdir -p $(dir $@)
+	$(CC) $(CPP_FLAGS) $(CFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/%.cpp.o: %.cpp
+	mkdir -p $(dir $@)
+	$(CXX) $(CPP_FLAGS) $(CXXFLAGS) -c $< -o $@
+
+clean:
+	-rm -r $(BUILD_DIR)
+-include $(DEPS)
+
+.PHONY: clean

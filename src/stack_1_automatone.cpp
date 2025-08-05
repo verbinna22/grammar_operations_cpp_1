@@ -1,4 +1,6 @@
 #include "stack_1_automatone.h"
+#include <unordered_set>
+#include "automatone.h"
 
 namespace grop {
 
@@ -40,7 +42,13 @@ Automaton generate_stack_1_automaton(int number_of_assign) {
             }
         }
     }
-    return Automaton(q0, state_number, {q0, qf}, transitions);
+    std::unordered_set<State> accept;
+    for (State q = q0; q < state_number; ++q) {
+        if (q != qd) {
+            accept.insert(q);
+        }
+    }
+    return Automaton(q0, state_number, accept, transitions);
 }
 
 } // namespace grop

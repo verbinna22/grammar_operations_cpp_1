@@ -1,11 +1,10 @@
 #include "grammar_io.h"
 
-#include <cstdint>
 #include <fstream>
-#include <sstream>
+#include <functional>
+#include <ostream>
 #include <string>
 #include <vector>
-#include <functional>
 
 #include "grammar.h"
 #include "rule.h"
@@ -83,38 +82,19 @@ end:
                    alphabet_non_terminals.size());
 }
 
-static std::string print_non_terminal(
-    NonTerminal nt,
-    std::function<bool(NonTerminal)> &i_states,
-    std::function<std::string(NonTerminal)> symbol_to_string,
-    uint64_t alphabet_size) {
-        if (nt < alphabet_size) {
-            return symbol_to_string(nt);
-        }
-        if (i_states(nt)) {
-            std::stringstream s;
-            s << "nt_" << nt << "_i";
-            return s.str();
-        }
-        std::stringstream s;
-        s << "nt_" << nt;
-        return s.str();
-}
-
 void write_grammar(
     const std::string &filename, const Grammar &grammar,
-    std::function<bool(NonTerminal)> i_states,
-    std::function<std::string(NonTerminal)> symbol_to_string,
-    uint64_t alphabet_size) {
+    std::function<std::string(NonTerminal)> non_terminal_to_string) {
     std::ofstream file(filename);
     for (const auto &rule : grammar.get_rules()) {
-        file << print_non_terminal(rule.get_main_non_terminal(), i_states, symbol_to_string, alphabet_size);
+        file << non_terminal_to_string(rule.get_main_non_terminal());
         for (const auto &non_terminal : rule.get_right_part()) {
-            file << "\t" << print_non_terminal(non_terminal, i_states, symbol_to_string, alphabet_size);
+            file << "\t" << non_terminal_to_string(non_terminal);
         }
         file << "\n";
     }
-    file << "Count:\n" << print_non_terminal(grammar.get_main_non_terminal(), i_states, symbol_to_string, alphabet_size) << "\n";
+    file << "Count:\n"
+         << non_terminal_to_string(grammar.get_main_non_terminal()) << std::endl;
 }
 
 }  // namespace grop
