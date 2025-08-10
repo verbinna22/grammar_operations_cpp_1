@@ -25,6 +25,16 @@ int main(int argc, const char **argv) {
     }
     const size_t alphabet_size = 4 + 4 * number_of_assign + 4;
     grop::Grammar grammar = grop::generate_points_to_grammar(number_of_assign);
+    if (number_of_assign == 0) {
+        auto non_terminal_to_string = [&](grop::NonTerminal nt) {
+            if (nt < alphabet_size) {
+                return grop::symbol_to_string(nt);
+            }
+            return grop::nt_to_string(nt, alphabet_size);
+        };
+        grop::write_grammar(GRAMMAR_FILE, grammar, non_terminal_to_string);
+        return 0;
+    }
     grop::Automaton dfa = grop::generate_stack_1_automaton(number_of_assign);
     grop::Grammar new_grammar = grop::intersect(grammar, dfa);
     new_grammar = grop::optimize_rules(new_grammar);
