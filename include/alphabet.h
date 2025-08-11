@@ -90,6 +90,7 @@ inline NonTerminal string_to_symbol(std::string nt) {
     nt = nt.substr(7);
     if (nt.rfind("r_", 0) == 0) {
         result += 2;
+        throw 1;
     }
     auto pos = nt.find("_");
     result += 4 * atoi(nt.substr(0, pos).c_str());
