@@ -16,6 +16,7 @@
 #include "symbol.h"
 
 int main() {
+    std::cout << "Test" << std::endl;
     { // build grammar
         grop::Grammar grammar = grop::generate_points_to_grammar(0);
         const size_t alphabet_size = 4 + 4;

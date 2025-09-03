@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <iostream>
+#include <unordered_map>
 
 #include "automatone.h"
 #include "grammar.h"
@@ -18,9 +19,26 @@ Grammar intersect(const Grammar &grammar, const Automaton &automaton) {
     const uint64_t symbols_number = grammar.get_symbols_number();
     const NonTerminal artificial_non_terminal = symbols_number;
     const auto &automaton_transitions = automaton.get_transitions();
-    for (const auto &rule : grammar.get_rules()) {
+    std::unordered_map<State, std::unordered_set<State>> reachable_from;
+    for (State q1 = 0; q1 < automaton.get_state_number(); ++q1) {
+        for (Symbol s = 0; s < symbols_number; ++s) {
+            reachable_from[q1].insert(automaton_transitions.find(q1)->second.find(s)->second);
+        }
+    }
+    for (State qm = 0; qm < automaton.get_state_number(); ++qm) {
         for (State q1 = 0; q1 < automaton.get_state_number(); ++q1) {
             for (State q2 = 0; q2 < automaton.get_state_number(); ++q2) {
+                if ((reachable_from[q1].find(q2) == reachable_from[q1].end()) &&
+                        (reachable_from[q1].find(qm) != reachable_from[q1].end()) &&
+                        (reachable_from[qm].find(q2) != reachable_from[qm].end())) {
+                    reachable_from[q1].insert(q2);
+                }
+            }
+        }
+    }
+    for (const auto &rule : grammar.get_rules()) {
+        for (State q1 = 0; q1 < automaton.get_state_number(); ++q1) {
+            for (State q2 : reachable_from[q1]) {
                 if (++progress % 1000 == 0) {
                     std::cout << progress << " " << rules.size() << std::endl;
                 }
@@ -82,8 +100,10 @@ Grammar intersect(const Grammar &grammar, const Automaton &automaton) {
                                               state_number, symbols_number)}));
                         }
                     } else {
-                        for (State qk = 0; qk < automaton.get_state_number();
-                             ++qk) {
+                        for (State qk : reachable_from[q1]) {
+                            if (reachable_from[qk].find(q2) == reachable_from[qk].end()) {
+                                continue;
+                            }
                             if (rule.get_right_part()[1] < symbols_number) {
                                 if (automaton_transitions.find(qk)
                                         ->second.find(rule.get_right_part()[1])
