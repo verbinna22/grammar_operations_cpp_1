@@ -8,7 +8,7 @@
             "name": "(gdb) Запустить",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/grammarOperations",
+            "program": "${workspaceFolder}/build/grammarOperationsTest",
             "args": ["/mnt/data/MyOwnFolder/learning/p_algo/pointers/graphs/basic/contexts_numbers.txt",
             "/mnt/data/MyOwnFolder/learning/p_algo/pointers/graphs/basic/grammar.cfg"],
             "stopAtEntry": false,
