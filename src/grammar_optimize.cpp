@@ -73,23 +73,42 @@ Grammar optimize_rules(const Grammar &grammar) {
         std::swap(rules[*it], rules[rules.size() - 1]);
         rules.pop_back();
     }
-    std::vector<bool> is_good(grammar.get_non_terminals_number());
-    is_good[grammar.get_main_non_terminal()] = true;
-    for (std::size_t j = 0; j < rules.size(); ++j) {
-        for (const auto &rule : rules) {
-            if (is_good[rule.get_main_non_terminal()]) {
-                for (const auto &nt : rule.get_right_part()) {
-                    is_good[nt] = true;
-                }
-            }
-        }
-    }
-    for (std::size_t j = rules.size(); j > 0; --j) {
-        if (!is_good[rules[j - 1].get_main_non_terminal()]) {
-            std::swap(rules[j - 1], rules[rules.size() - 1]);
-            rules.pop_back();
-        }
-    }
+    //
+    // std::vector<std::vector<const Rule *>> nt_to_rules(grammar.get_non_terminals_number() - grammar.get_symbols_number());
+    // for (const auto &rule : rules) {
+    //     nt_to_rules[rule.get_main_non_terminal() -  grammar.get_symbols_number()].push_back(&rule);
+    // }
+    // //
+    // std::vector<bool> is_good(grammar.get_non_terminals_number());
+    // std::queue<NonTerminal> waiting;
+    // waiting.push(grammar.get_main_non_terminal());
+    // while (!waiting.empty()) {
+    //     NonTerminal nt = waiting.front();
+    //     waiting.pop();
+    //     is_good[nt] = true;
+    //     for (const auto roolptr: nt_to_rules[nt - grammar.get_symbols_number()]) {
+    //         for (NonTerminal ntm : roolptr->get_right_part()) {
+    //             if (!is_good[ntm] && ntm >= grammar.get_symbols_number()) {
+    //                 waiting.push(ntm);
+    //             }
+    //         }
+    //     }
+    // }
+    // for (std::size_t j = 0; j < rules.size(); ++j) {
+    //     for (const auto &rule : rules) {
+    //         if (is_good[rule.get_main_non_terminal()]) {
+    //             for (const auto &nt : rule.get_right_part()) {
+    //                 is_good[nt] = true;
+    //             }
+    //         }
+    //     }
+    // }
+    // for (std::size_t j = rules.size(); j > 0; --j) {
+    //     if (!is_good[rules[j - 1].get_main_non_terminal()]) {
+    //         std::swap(rules[j - 1], rules[rules.size() - 1]);
+    //         rules.pop_back();
+    //     }
+    // }
     return Grammar(grammar.get_main_non_terminal(),
                    grammar.get_non_terminals_number(), rules,
                    grammar.get_symbols_number());

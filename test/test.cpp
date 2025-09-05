@@ -62,39 +62,39 @@ int main() {
         grop::write_grammar("../test/optimized_grammar.cfg", grammar,non_terminal_to_string);
     }
     {
-        /*
-            A -> a | A a | B
-            B ->
-            N -> A
-            C -> C
+        // /*
+        //     A -> a | A a | B
+        //     B ->
+        //     N -> A
+        //     C -> C
 
-            A -> a | A a
-            N -> A
-        */
-        grop::Grammar grammar = grop::Grammar(2, 4 + 2, {
-            grop::Rule(3, {0}),
-            grop::Rule(3, {3, 0}),
-            grop::Rule(3, {4}),
-            grop::Rule(4, {}),
-            grop::Rule(2, {3}),
-            grop::Rule(5, {5}),
-        }, 2);
-        auto non_terminal_to_string = [&](grop::NonTerminal nt) {
-            switch (nt) {
-                case 0: return "a";
-                case 1: return "b";
-                case 2: return "N";
-                case 3: return "A";
-                case 4: return "B";
-                case 5: return "C";
-            }
-            throw std::logic_error("error");
-        };
-        grammar = grop::optimize_rules(grammar);
-        grop::write_grammar("../test/optimized_grammar_cycled.cfg", grammar,non_terminal_to_string);
+        //     A -> a | A a
+        //     N -> A
+        // */
+        // grop::Grammar grammar = grop::Grammar(2, 4 + 2, {
+        //     grop::Rule(3, {0}),
+        //     grop::Rule(3, {3, 0}),
+        //     grop::Rule(3, {4}),
+        //     grop::Rule(4, {}),
+        //     grop::Rule(2, {3}),
+        //     grop::Rule(5, {5}),
+        // }, 2);
+        // auto non_terminal_to_string = [&](grop::NonTerminal nt) {
+        //     switch (nt) {
+        //         case 0: return "a";
+        //         case 1: return "b";
+        //         case 2: return "N";
+        //         case 3: return "A";
+        //         case 4: return "B";
+        //         case 5: return "C";
+        //     }
+        //     throw std::logic_error("error");
+        // };
+        // grammar = grop::optimize_rules(grammar);
+        // grop::write_grammar("../test/optimized_grammar_cycled.cfg", grammar,non_terminal_to_string);
     }
     {
-        grop::Grammar grammar = grop::Grammar(2, 4 + 2, {
+        grop::Grammar grammar = grop::Grammar(2, 3 + 2, {
             grop::Rule(3, {0}),
             grop::Rule(4, {1}),
             grop::Rule(2, {2, 3}),

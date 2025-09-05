@@ -10,6 +10,7 @@ namespace grop {
 
 using State = uint64_t;
 
+// qd == 2
 class Automaton {
    public:
     Automaton(State initial_state, uint64_t state_number,

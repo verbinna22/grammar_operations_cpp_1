@@ -39,6 +39,10 @@ Grammar intersect(const Grammar &grammar, const Automaton &automaton) {
     for (const auto &rule : grammar.get_rules()) {
         for (State q1 = 0; q1 < automaton.get_state_number(); ++q1) {
             for (State q2 : reachable_from[q1]) {
+#define qd 2
+                if (q1 == qd || q2 == qd) {
+                    continue;
+                }
                 if (++progress % 1000 == 0) {
                     std::cout << progress << " " << rules.size() << std::endl;
                 }
